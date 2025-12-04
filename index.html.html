@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Starkverse | The Ultimate Gaming Community</title>
+    <meta name="description" content="Starkverse: Your hub for gaming forums, events, news, and member profiles.">
+
+    <style>
+        /*
+        ==================================================================================================
+        GLOBAL STYLES & THEME (Starkverse Theme: Dark/Steel)
+        ==================================================================================================
+        */
+        :root {
+            --primary-color: #3b82f6; /* Steel Blue */
+            --primary-dark: #2563eb;
+            --bg-color-light: #f8f8f8;
+            --text-color-light: #333;
+            --card-bg-light: #fff;
+            
+            --bg-color-dark: #1f2937; /* Dark Slate */
+            --text-color-dark: #e5e7eb;
+            --card-bg-dark: #374151;
+            --border-color-dark: #4b5563;
+
+            --transition-speed: 0.3s;
+            --max-width: 1400px;
+            --radius: 8px;
+            --shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            --online-color: #10b981; /* Green */
+            --admin-color: #f59e0b; /* Yellow */
+            --mod-color: #14b8a6; /* Cyan */
+        }
+
+        /* Initial/Default Light Mode */
+        :root:not(.dark-mode) {
+            --bg-color: var(--bg-color-light);
+            --text-color: var(--text-color-light);
+            --card-bg: var(--card-bg-light);
+            --border-color: #ddd;
+            --accent-bg: #eee;
+            --footer-bg: #333;
+            --footer-text: #fff;
+        }
+
+        /* Dark Mode */
+        .dark-mode {
+            --bg-color: var(--bg-color-dark);
+            --text-color: var(--text-color-dark);
+            --card-bg: var(--card-bg-dark);
+            --border-color: var(--border-color-dark);
+            --accent-bg: #4b5563;
+            --footer-bg: #111827;
+            --footer-text: #e5e7eb;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            /* Smoother font rendering for dark theme contrast */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color var(--transition-speed), color var(--transition-speed);
+            scroll-behavior: smooth;
+        }
+
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color var(--transition-speed);
+        }
+
+        a:hover, a:focus {
+            color: var(--primary-dark);
+            outline-offset: 2px;
+            outline: 2px solid var(--primary-color);
+        }
+
+        .container {
+            width: 100%;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        /* --- General Section Styling --- */
+        section {
+            padding: 4rem 1rem;
+        }
+        
+        h1, h2, h3 {
+            color: var(--primary-color);
+        }
+        
+        /* --- Header / Navigation --- */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary-color);
+            text-transform: uppercase;
+        }
+        
+        .logo svg {
+            width: 32px;
+            height: 32px;
+            fill: var(--primary-color);
+        }
+
+        .main-nav ul {
+            display: none; /* Hidden on mobile */
+            list-style: none;
+        }
+
+        .main-nav a {
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-color);
+            font-size: 1.5rem;
+            padding: 0.5rem;
+            border-radius: var(--radius);
+        }
+
+        /* Desktop Navigation */
+        @media (min-width: 768px) {
+            .main-nav ul {
+                display: flex;
+                gap: 0.5rem;
+            }
+        }
+        
+        /* --- Footer --- */
+        .footer {
+            background-color: var(--footer-bg);
+            color: var(--footer-text);
+            padding: 2rem 0;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .footer a {
+            color: var(--primary-color);
+            margin: 0 5px;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .social-icons a {
+            color: var(--footer-text);
+            transition: color var(--transition-speed);
+            display: flex;
+            align-items: center;
+        }
+
+        .social-icons svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+        
+        /*
+        ==================================================================================================
+        MODULE-SPECIFIC STYLES (To ensure consistency)
+        ==================================================================================================
+        */
+        
+        /* HOME HERO */
+        #home .hero {
+            text-align: center;
+            padding: 6rem 0;
+            background: linear-gradient(135deg, var(--card-bg) 0%, var(--bg-color) 100%);
+            border-radius: 0 0 var(--radius) var(--radius);
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: var(--card-bg-light); 
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius);
+            font-weight: bold;
+            text-transform: uppercase;
+            box-shadow: var(--shadow);
+            border: none;
+            cursor: pointer;
+        }
+        
+        /* FORUMS, MEMBERS, EVENTS common card styles */
+        .card, .thread-item, .profile-card, .event-item {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        /* MEMBERS specific styles */
+        .role-admin { background-color: var(--admin-color); color: var(--card-bg-dark); }
+        .role-mod { background-color: var(--mod-color); color: var(--card-bg-dark); }
+        .role-gamer { background-color: var(--online-color); color: var(--card-bg-dark); }
+        
+        /* CALENDAR specific styles */
+        .calendar-grid {
+            background-color: var(--card-bg);
+            padding: 1rem;
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            gap: 2px;
+            border-radius: var(--radius);
+        }
+        
+        .date-cell:not(.empty) {
+            border: 1px solid transparent;
+            cursor: pointer;
+        }
+        
+        .date-cell.today {
+            background-color: rgba(59, 130, 246, 0.2);
+            font-weight: bold;
+        }
+        
+        /* THREAD LIST */
+        .thread-item {
+            display: grid;
+            grid-template-columns: 1fr 100px 100px;
+            cursor: pointer;
+        }
+        
+        /* THREAD PREVIEW (Sidebar) */
+        .thread-preview {
+            background-color: var(--card-bg);
+            padding: 1rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        @media (min-width: 1024px) {
+            #forums .container {
+                display: grid;
+                grid-template-columns: 3fr 1fr;
+                gap: 2rem;
+            }
+            .thread-list-area { grid-column: 1 / 2; }
+            .thread-preview { grid-column: 2 / 3; }
+        }
+
+        /* CONTACT FORM */
+        #contact-form input:not([type="checkbox"]), #contact-form textarea {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+        
+        .success {
+            background-color: #d1fae5;
+            color: var(--online-color);
+        }
+        
+        .error {
+            background-color: #fee2e2;
+            color: #ef4444;
+        }
+
+    </style>
+</head>
+<body class="dark-mode">
+    <header class="header">
+        <div class="container header-content">
+            <a href="#home" class="logo" aria-label="Starkverse Home">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2l-2.5 5.5L2 8.5l4 4L5.5 19l6.5-3 6.5 3-1.5-6.5 4-4-7.5-1z" fill="currentColor"/>
+                </svg>
+                STARKVERSE
+            </a>
+            
+            <nav class="main-nav" role="navigation" aria-label="Main Site Navigation">
+                <ul>
+                    <li><a href="#home" aria-label="Home">Home</a></li>
+                    <li><a href="#forums" aria-label="Forums">Forums</a></li>
+                    <li><a href="#events" aria-label="News and Events">Events</a></li>
+                    <li><a href="#members" aria-label="Members Directory">Members</a></li>
+                    <li><a href="#about" aria-label="About and Contact">About</a></li>
+                </ul>
+            </nav>
+            
+            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle light and dark mode">
+                <svg id="toggle-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor">
+                    <path d="M12 2.25c-5.38 0-9.75 4.37-9.75 9.75S6.62 21.75 12 21.75c.41 0 .75-.34.75-.75s-.34-.75-.75-.75c-4.56 0-8.25-3.69-8.25-8.25S7.44 3.75 12 3.75V12c0 .41.34.75.75.75s.75-.34.75-.75V2.25c0-.41-.34-.75-.75-.75z"/>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <section id="home">
+            <div class="container">
+                <div class="hero" role="region" aria-label="Starkverse Introduction">
+                    <p class="hero-tagline" style="font-size: 1.5rem; margin-bottom: 1rem; color: var(--primary-color);">Welcome to the Next Dimension of Gaming</p>
+                    <h1 style="font-size: clamp(2.5rem, 8vw, 4rem); margin-bottom: 2rem; color: var(--text-color);">Connect, Compete, Conquer in Starkverse.</h1>
+                    <a href="#forums" class="cta-button">Join The Community Now</a>
+                </div>
+
+                <div class="quick-links" style="background-color: var(--card-bg); padding: 1rem 0; margin: 2rem 0; border-radius: var(--radius); box-shadow: var(--shadow);">
+                    <nav>
+                        <ul style="display: flex; justify-content: space-around; list-style: none; padding: 0;">
+                            <li><a href="#forums" aria-label="Go to Forums">Forums</a></li>
+                            <li><a href="#events" aria-label="View Events">Events</a></li>
+                            <li><a href="#members" aria-label="Meet Members">Members</a></li>
+                            <li><a href="#about" aria-label="About Starkverse">About</a></li>
+                        </ul>
+                    </nav>
+                </div>
+
+                <div class="featured-games" style="text-align: center;">
+                    <h2 style="margin-bottom: 2rem;">🎮 Featured Games</h2>
+                    <div class="game-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                        <article class="card">
+                            <h3 style="color: var(--text-color); margin-bottom: 0.5rem;">Project Chimera</h3>
+                            <p style="font-size: 0.9rem;">Next-gen military shooter with advanced vehicular combat. Dominate the ground and air.</p>
+                            <span style="display: inline-block; background-color: var(--primary-color); color: white; padding: 0.25rem 0.75rem; border-radius: 50px; font-size: 0.8rem; margin-top: 1rem;">FPS / Tactical</span>
+                        </article>
+                        <article class="card">
+                            <h3 style="color: var(--text-color); margin-bottom: 0.5rem;">Aetherian Saga</h3>
+                            <p style="font-size: 0.9rem;">Massive multiplayer RPG. Explore 5 continents, master magic, and join epic guild wars.</p>
+                            <span style="display: inline-block; background-color: var(--primary-color); color: white; padding: 0.25rem 0.75rem; border-radius: 50px; font-size: 0.8rem; margin-top: 1rem;">MMORPG / Fantasy</span>
+                        </article>
+                        <article class="card">
+                            <h3 style="color: var(--text-color); margin-bottom: 0.5rem;">Starship Protocol</h3>
+                            <p style="font-size: 0.9rem;">Competitive 3v3 arena brawler with unique hero abilities and intense objective play.</p>
+                            <span style="display: inline-block; background-color: var(--primary-color); color: white; padding: 0.25rem 0.75rem; border-radius: 50px; font-size: 0.8rem; margin-top: 1rem;">MOBA / Arena</span>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="forums" style="background-color: var(--accent-bg);">
+            <div class="container">
+                 <header class="forum-header" style="background-color: var(--card-bg); padding: 1.5rem; border-radius: var(--radius); margin-bottom: 1.5rem;">
+                    <h2>💬 Starkverse Forums</h2>
+                    <div class="header-controls" style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+                        <input type="text" id="forums-search-input" placeholder="Search threads by title or tags..." aria-label="Search threads" style="flex-grow: 1; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--radius); background-color: var(--bg-color); color: var(--text-color);">
+                        <button class="cta-button" id="open-modal-btn">➕ New Thread</button>
+                    </div>
+                </header>
+
+                <div style="display: grid; gap: 1.5rem; grid-template-areas: 'main' 'sidebar';">
+                    <div class="thread-list-area" style="grid-area: main;">
+                        <div class="controls-row" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; padding: 0.75rem 0;">
+                            <div class="filter-chips" id="tag-filters">
+                                <span class="filter-chip active" data-tag="all" tabindex="0" style="padding: 0.25rem 0.75rem; border-radius: 50px; background-color: var(--primary-color); color: white; cursor: pointer;">All</span>
+                                </div>
+                            <div class="sort-controls">
+                                <label for="sort-by" style="font-weight: 600;">Sort:</label>
+                                <select id="sort-by" aria-controls="thread-list" style="padding: 0.5rem; border-radius: var(--radius); background-color: var(--card-bg); color: var(--text-color); border-color: var(--border-color);">
+                                    <option value="activity">Last Activity</option>
+                                    <option value="new">Newest</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <ul class="thread-list" id="thread-list" style="list-style: none; padding: 0;">
+                            </ul>
+
+                        <nav class="pagination" style="display: flex; justify-content: center; gap: 0.5rem; padding: 1rem 0;">
+                            <button id="prev-page" disabled style="padding: 0.5rem 1rem; border-radius: var(--radius); background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color);">Previous</button>
+                            <span id="page-info" style="padding: 0.5rem 1rem;">Page 1 of 1</span>
+                            <button id="next-page" disabled style="padding: 0.5rem 1rem; border-radius: var(--radius); background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color);">Next</button>
+                        </nav>
+                    </div>
+
+                    <aside class="thread-preview" id="thread-preview-panel" style="display: none; grid-area: sidebar;">
+                        <div class="preview-placeholder" id="preview-placeholder" style="text-align: center; padding: 2rem;">Click a thread to view its content.</div>
+                        <div class="preview-content" id="preview-content" style="display: none;">
+                            <h3 id="preview-title"></h3>
+                            <div class="comment-box"><form id="reply-form"><textarea id="reply-content"></textarea><button type="submit" class="cta-button" style="float: right;">Post Comment</button></form></div>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </section>
+
+        <section id="events">
+            <div class="container" style="grid-template-columns: 1fr; display: grid; gap: 2rem;">
+                <div class="news-column" style="grid-column: 1 / -1;">
+                    <h2 style="margin-bottom: 1.5rem;">📰 Latest Announcements</h2>
+                    <div id="news-list" style="display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+                        </div>
+                </div>
+
+                <div class="events-column" style="grid-column: 1 / -1;">
+                    <div class="controls-row" style="margin-bottom: 1rem;">
+                        <h2>🗓️ Event Calendar</h2>
+                        <button class="cta-button" id="open-event-modal" style="background-color: var(--online-color);">Create Event</button>
+                    </div>
+
+                    <div class="calendar-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <button id="prev-month" style="background: var(--card-bg); color: var(--text-color); padding: 0.5rem; border-radius: var(--radius); border: 1px solid var(--border-color);">&lt;</button>
+                        <h3 id="current-month-year" style="margin: 0;">Month Year</h3>
+                        <button id="next-month" style="background: var(--card-bg); color: var(--text-color); padding: 0.5rem; border-radius: var(--radius); border: 1px solid var(--border-color);">&gt;</button>
+                    </div>
+
+                    <div class="calendar-grid" id="calendar-grid">
+                        <div class="day-name" style="font-weight: bold; color: var(--primary-color);">Sun</div>
+                        <div class="day-name" style="font-weight: bold; color: var(--primary-color);">Mon</div>
+                        <div class="day-name" style="font-weight: bold; color: var(--primary-color);">Tue</div>
+                        <div class="day-name" style="font-weight: bold; color: var(--primary-color);">Wed</div>
+                        <div class="day-name" style="font-weight: bold; color: var(--primary-color);">Thu</div>
+                        <div class="day-name" style="font-weight: bold; color: var(--primary-color);">Fri</div>
+                        <div class="day-name" style="font-weight: bold; color: var(--primary-color);">Sat</div>
+                        </div>
+
+                    <div class="filter-group" style="display: flex; gap: 1rem; margin-top: 1rem;">
+                        <label><input type="checkbox" id="tournament-filter" checked> Show Tournaments</label>
+                        <label><input type="checkbox" id="community-filter" checked> Show Community Events</label>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="members" style="background-color: var(--accent-bg);">
+            <div class="container">
+                <h2 style="margin-bottom: 2rem;">👤 Starkverse Members</h2>
+                
+                <div class="controls card" style="margin-bottom: 2rem; padding: 1.5rem;">
+                    <div class="search-row" style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                        <input type="text" id="members-search-input" placeholder="Search by username..." aria-label="Search members by username" style="flex-grow: 1; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--radius); background-color: var(--bg-color); color: var(--text-color);">
+                    </div>
+                    <div class="filter-row" style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+                        <label for="filter-role">Role:</label>
+                        <select id="filter-role" style="padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--radius); background-color: var(--bg-color); color: var(--text-color);"></select>
+                        <label for="filter-platform">Platform:</label>
+                        <select id="filter-platform" style="padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--radius); background-color: var(--bg-color); color: var(--text-color);"></select>
+                        <label for="filter-status">Status:</label>
+                        <select id="filter-status" style="padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--radius); background-color: var(--bg-color); color: var(--text-color);"></select>
+                        <label for="sort-by-members" style="margin-left: auto;">Sort By:</label>
+                        <select id="sort-by-members" style="padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--radius); background-color: var(--bg-color); color: var(--text-color);">
+                            <option value="online">Online Status</option>
+                            <option value="level">Top Level</option>
+                            <option value="newest">Newest</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="profile-grid" id="profile-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
+                    </div>
+            </div>
+        </section>
+
+        <section id="about">
+            <div class="container">
+                <h2 style="text-align: center;">⭐ About Starkverse</h2>
+
+                <div class="card" style="margin-bottom: 2rem;">
+                    <h3>🚀 Our Mission</h3>
+                    <p><strong>Starkverse</strong> is the nexus for serious and casual gamers alike. We foster an environment of **respect, competition, and discovery**, ensuring every member finds their place in our expanding universe.</p>
+                </div>
+
+                <div class="card" style="margin-bottom: 2rem;">
+                    <h3>📜 Community Guidelines</h3>
+                    <div id="rules-accordion"></div>
+                </div>
+
+                <div class="card" style="margin-bottom: 2rem;">
+                    <h3>❓ FAQ</h3>
+                    <div id="faq-accordion"></div>
+                </div>
+
+                <div class="card">
+                    <h3>📧 Get In Touch</h3>
+                    <form id="contact-form" novalidate>
+                        <div id="form-message" style="display: none; padding: 1rem; border-radius: 4px; margin-bottom: 1rem;"></div>
+
+                        <label for="name" style="display: block; margin-top: 1rem;">Your Name</label>
+                        <input type="text" id="name" name="name" required style="width: 100%; padding: 0.75rem; border-radius: 4px; margin-top: 0.5rem; background-color: var(--bg-color); color: var(--text-color);">
+
+                        <label for="email" style="display: block; margin-top: 1rem;">Your Email</label>
+                        <input type="email" id="email" name="email" required style="width: 100%; padding: 0.75rem; border-radius: 4px; margin-top: 0.5rem; background-color: var(--bg-color); color: var(--text-color);">
+
+                        <label for="subject" style="display: block; margin-top: 1rem;">Subject</label>
+                        <input type="text" id="subject" name="subject" required style="width: 100%; padding: 0.75rem; border-radius: 4px; margin-top: 0.5rem; background-color: var(--bg-color); color: var(--text-color);">
+
+                        <label for="message" style="display: block; margin-top: 1rem;">Message</label>
+                        <textarea id="message" name="message" rows="5" required style="width: 100%; padding: 0.75rem; border-radius: 4px; margin-top: 0.5rem; background-color: var(--bg-color); color: var(--text-color);"></textarea>
+                        
+                        <div id="honeypot" style="display: none !important; visibility: hidden;">
+                            <label for="comment-field">Do not fill this field</label>
+                            <input type="text" id="comment-field" name="comment-field" tabindex="-1" autocomplete="off">
+                        </div>
+
+                        <button type="submit" class="cta-button" style="margin-top: 1.5rem; background-color: var(--primary-dark);">Send Message</button>
+                    </form>
+                    
+                    <div class="report-link" style="text-align: right; margin-top: 1rem;">
+                        <a href="#" id="open-report-modal" style="color: #ef4444;">Found an issue? Report a User</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <footer class="footer">
+        <div class="container">
+            <div class="social-icons">
+                <a href="#twitter" aria-label="Follow us on X/Twitter">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.46 6c-.8.36-1.64.6-2.52.7a4.92 4.92 0 0 0-3.4-.66C13.2 5.5 12 7 12 8.75v1c-3.15 0-5.93-1.6-7.8-4.14-.3.5-.47 1.1-.47 1.76 0 1.2.6 2.3 1.55 2.9-.7-.02-1.35-.2-1.93-.5v.05c0 1.6 1.14 2.93 2.65 3.22-.3.08-.6.1-.9.1-.22 0-.44-.02-.65-.06.42 1.3 1.6 2.2 3.03 2.23-1.12.9-2.5 1.4-4 1.4-.26 0-.52-.01-.78-.04 1.45.93 3.17 1.47 5.02 1.47 6.02 0 9.33-5 9.33-9.33v-.47c.64-.46 1.2-.97 1.64-1.57z"/></svg>
+                </a>
+                <a href="#discord" aria-label="Join our Discord server">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.21 2.37a.89.89 0 0 0-.89.02l-1.38.65a.6.6 0 0 1-.77 0c-.78-.37-1.58-.68-2.39-.93C13.88 1.1 12.94 1 12 1s-1.88.1-2.78.38c-.81.25-1.61.56-2.39.93a.6.6 0 0 1-.77 0l-1.38-.65a.89.89 0 0 0-.89-.02C2.18 3.03 2 4.1 2 5.25v.19c0 .7.12 1.38.35 2.03a11.18 11.18 0 0 0 2.2 3.86 12.56 12.56 0 0 0 2.5 2.15c.66.45 1.38.83 2.1 1.18 1.45.7 3.05 1.05 4.6 1.05s3.15-.35 4.6-1.05c.72-.35 1.44-.73 2.1-1.18a12.56 12.56 0 0 0 2.5-2.15 11.18 11.18 0 0 0 2.2-3.86c.23-.65.35-1.33.35-2.03v-.19C22 4.1 21.82 3.03 21.14 2.37zm-5.74 8.78c.84 0 1.52.7 1.52 1.56s-.68 1.56-1.52 1.56-1.52-.7-1.52-1.56.68-1.56 1.52-1.56zm-4.94 0c.84 0 1.52.7 1.52 1.56s-.68 1.56-1.52 1.56-1.52-.7-1.52-1.56.68-1.56 1.52-1.56z"/></svg>
+                </a>
+                <a href="#youtube" aria-label="Subscribe to our YouTube channel">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21.5 8.16a2.6 2.6 0 0 0-1.84-1.84C18.66 6 12 6 12 6s-6.66 0-7.66.32a2.6 2.6 0 0 0-1.84 1.84C2 9.16 2 12 2 12s0 2.84.32 3.84a2.6 2.6 0 0 0 1.84 1.84c1 .32 7.66.32 7.66.32s6.66 0 7.66-.32a2.6 2.6 0 0 0 1.84-1.84c.32-1 .32-3.84.32-3.84s0-2.84-.32-3.84zM10 16.5v-9L16 12l-6 4.5z"/></svg>
+                </a>
+            </div>
+            <p>&copy; 2025 Starkverse. All rights reserved.</p>
+            <p style="font-size: 0.75rem; color: #9ca3af;">Last updated: December 4, 2025</p>
+        </div>
+    </footer>
+
+    <div id="new-thread-modal" class="modal" role="dialog" aria-modal="true" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); justify-content: center; align-items: center; z-index: 1000;">
+        <div class="card" style="width: 90%; max-width: 600px; padding: 2rem; position: relative;">
+            <button class="close-btn" id="close-modal-btn" style="position: absolute; top: 10px; right: 10px; font-size: 1.5rem; background: none; border: none; color: var(--text-color);">&times;</button>
+            <h2>Create New Thread</h2>
+            <form id="new-thread-form">
+                <label for="thread-title" style="display: block; margin-top: 1rem;">Title</label>
+                <input type="text" id="thread-title" required style="width: 100%; padding: 0.75rem; border-radius: 4px; background-color: var(--bg-color); color: var(--text-color);">
+                
+                <label for="thread-tag" style="display: block; margin-top: 1rem;">Tag</label>
+                <select id="thread-tag" required style="width: 100%; padding: 0.75rem; border-radius: 4px; background-color: var(--bg-color); color: var(--text-color);"></select>
+
+                <label for="thread-content" style="display: block; margin-top: 1rem;">Content</label>
+                <textarea id="thread-content" rows="6" required style="width: 100%; padding: 0.75rem; border-radius: 4px; background-color: var(--bg-color); color: var(--text-color);"></textarea>
+
+                <button type="submit" class="cta-button" style="width: 100%; margin-top: 1.5rem;">Create Thread</button>
+            </form>
+        </div>
+    </div>
+    
+    <div id="news-modal" class="modal" role="dialog" aria-modal="true" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); justify-content: center; align-items: center; z-index: 1000;">
+        <div class="card" style="width: 90%; max-width: 700px; padding: 2rem; position: relative; max-height: 90vh; overflow-y: auto;">
+            <button class="close-btn" id="close-news-modal" style="position: absolute; top: 10px; right: 10px; font-size: 1.5rem; background: none; border: none; color: var(--text-color);">&times;</button>
+            <div id="news-modal-content">
+                <h2 id="news-modal-title"></h2>
+                <small id="news-modal-date" style="display: block; margin-bottom: 1rem; color: #9ca3af;"></small>
+                <p id="news-modal-body"></p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="create-event-modal" class="modal" role="dialog" aria-modal="true" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); justify-content: center; align-items: center; z-index: 1000;">
+        <div class="card" style="width: 90%; max-width: 500px; padding: 2rem; position: relative;">
+            <button class="close-btn" id="close-event-modal" style="position: absolute; top: 10px; right: 10px; font-size: 1.5rem; background: none; border: none; color: var(--text-color);">&times;</button>
+            <h2 style="color: var(--online-color);">➕ Create New Event</h2>
+            <form id="create-event-form">
+                <label for="event-title" style="display: block; margin-top: 1rem;">Title</label>
+                <input type="text" id="event-title" required style="width: 100%; padding: 0.75rem; border-radius: 4px; background-color: var(--bg-color); color: var(--text-color);">
+
+                <label for="event-date" style="display: block; margin-top: 1rem;">Date</label>
+                <input type="date" id="event-date" required style="width: 100%; padding: 0.75rem; border-radius: 4px; background-color: var(--bg-color); color: var(--text-color);">
+
+                <label for="event-type" style="display: block; margin-top: 1rem;">Type</label>
+                <select id="event-type" required style="width: 100%; padding: 0.75rem; border-radius: 4px; background-color: var(--bg-color); color: var(--text-color);">
+                    <option value="tournament">Tournament</option>
+                    <option value="community">Community Event</option>
+                </select>
+
+                <button type="submit" class="cta-button" style="width: 100%; margin-top: 1.5rem; background-color: var(--online-color);">Add Event</button>
+            </form>
+        </div>
+    </div>
+    
+    <div id="profile-modal" class="modal" role="dialog" aria-modal="true" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); justify-content: center; align-items: center; z-index: 1000;">
+        <div class="card" style="width: 90%; max-width: 800px; padding: 2rem; position: relative; max-height: 90vh; overflow-y: auto;">
+            <button class="close-btn" id="close-profile-modal" style="position: absolute; top: 10px; right: 10px; font-size: 1.5rem; background: none; border: none; color: var(--text-color);">&times;</button>
+            <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem;">
+                </div>
+        </div>
+    </div>
+    
+    <div id="report-modal" class="modal" role="dialog" aria-modal="true" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center; z-index: 1000;">
+        <div class="card" style="width: 90%; max-width: 500px; padding: 2rem; position: relative;">
+            <button class="close-btn" id="close-report-modal" style="position: absolute; top: 10px; right: 10px; font-size: 1.5rem; background: none; border: none; color: var(--text-color);">&times;</button>
+            <h3 style="color: #ef4444;">🚨 Report a User</h3>
+            <form id="report-form">
+                <label for="reported-user-id" style="display: block; margin-top: 1rem;">User ID or Email</label>
+                <input type="text" id="reported-user-id" name="reported-user-id" required style="width: 100%; padding: 0.75rem; border-radius: 4px; background-color: var(--bg-color); color: var(--text-color);">
+                <label for="report-reason" style="display: block; margin-top: 1rem;">Reason for Report</label>
+                <textarea id="report-reason" name="report-reason" rows="4" required style="width: 100%; padding: 0.75rem; border-radius: 4px; background-color: var(--bg-color); color: var(--text-color);"></textarea>
+                <button type="submit" class="cta-button" style="width: 100%; margin-top: 1.5rem; background-color: #ef4444;">Submit Report</button>
+            </form>
+        </div>
+    </div>
+
+    <aside id="event-drawer" style="position: fixed; bottom: 0; left: 0; width: 100%; max-height: 80vh; background-color: var(--card-bg); border-top: 3px solid var(--primary-color); box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.4); transform: translateY(100%); transition: transform var(--transition-speed) ease-in-out; z-index: 900; padding: 1rem; overflow-y: auto;">
+        <div class="drawer-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; margin-bottom: 1rem;">
+            <h3 id="drawer-date-title">Events on [Date]</h3>
+            <button class="drawer-close" id="close-drawer-btn" style="background: none; border: none; color: var(--text-color); font-size: 1.5rem; cursor: pointer;">&times;</button>
+        </div>
+        <div id="drawer-event-list">
+            <p id="no-events-message">No events scheduled for this day.</p>
+        </div>
+    </aside>
+
+    <script>
+        /*
+        ==================================================================================================
+        MASTER JAVASCRIPT LOGIC
+        Consolidating and linking all module scripts.
+        ==================================================================================================
+        */
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const body = document.body;
+            const toggleButton = document.getElementById('theme-toggle');
+            
+            // ------------------------------------------------------------------------------------------
+            // 1. THEME TOGGLE (GLOBAL)
+            // ------------------------------------------------------------------------------------------
+            
+            function updateTheme(theme) {
+                const isDark = theme === 'dark-mode';
+                body.className = theme;
+                
+                const iconPath = isDark
+                    ? 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4-8h-3V7h-2v5H8l4 4 4-4z' // Sun-like
+                    : 'M12 2.25c-5.38 0-9.75 4.37-9.75 9.75S6.62 21.75 12 21.75c.41 0 .75-.34.75-.75s-.34-.75-.75-.75c-4.56 0-8.25-3.69-8.25-8.25S7.44 3.75 12 3.75V12c0 .41.34.75.75.75s.75-.34.75-.75V2.25c0-.41-.34-.75-.75-.75z'; // Moon
+                    
+                document.getElementById('toggle-icon').innerHTML = `<path d="${iconPath}"/>`;
+            }
+
+            const currentTheme = localStorage.getItem('theme') || 'dark-mode'; // Default to dark for presentation
+            updateTheme(currentTheme);
+
+            toggleButton.addEventListener('click', () => {
+                const newTheme = body.classList.contains('dark-mode') ? 'light-mode' : 'dark-mode';
+                localStorage.setItem('theme', newTheme);
+                updateTheme(newTheme);
+            });
+            
+            // ------------------------------------------------------------------------------------------
+            // 2. DATA SEEDING (Shared Data)
+            // ------------------------------------------------------------------------------------------
+            
+            let threadData = [
+                { id: 1, title: "Best settings for Project Chimera?", author: "GamerPro", replies: 15, tags: ["Tech Support"], content: "Looking for optimized graphics and mouse sensitivity.", lastActivity: Date.now() - (3 * 3600000), comments: [{ author: "ExpertLoot", content: "Turn off VSync.", timestamp: Date.now() - (2 * 3600000) }] },
+                { id: 2, title: "Aetherian Saga Guild Recruitment", author: "Admin_Event", replies: 42, tags: ["General"], content: "Recruiting active players for the Winter Clash Tournament.", lastActivity: Date.now() - (1 * 86400000), comments: [{ author: "TeamAlpha", content: "Registered!", timestamp: Date.now() - (0.5 * 86400000) }] },
+                { id: 3, title: "Feedback on site performance", author: "WebUser", replies: 8, tags: ["Feedback"], content: "The search bar is slow on mobile.", lastActivity: Date.now() - (7 * 86400000), comments: [{ author: "Admin_Dev", content: "Thanks for the feedback!", timestamp: Date.now() - (6 * 86400000) }] },
+                { id: 4, title: "Starship Protocol meta discussion", author: "WeekendWarrior", replies: 22, tags: ["Tactics"], content: "What are the strongest team compositions this patch?", lastActivity: Date.now() - (2 * 3600000), comments: [{ author: "MOBAchamp", content: "Grinding ranks.", timestamp: Date.now() - (1 * 3600000) }] },
+            ];
+            let nextThreadId = threadData.reduce((max, thread) => Math.max(max, thread.id), 0) + 1;
+
+            let memberData = [
+                { id: 101, username: "CyberKnight", role: "admin", level: 95, xp: 4500, xpNext: 5000, platform: "pc", isOnline: true, joinDate: Date.now() - (300 * 86400000) },
+                { id: 102, username: "ModSquad", role: "mod", level: 78, xp: 2100, xpNext: 3000, platform: "console", isOnline: true, joinDate: Date.now() - (200 * 86400000) },
+                { id: 103, username: "ProGamer", role: "gamer", level: 60, xp: 120, xpNext: 2000, platform: "pc", isOnline: false, joinDate: Date.now() - (150 * 86400000) },
+                { id: 104, username: "CasualGuy", role: "gamer", level: 30, xp: 1500, xpNext: 2500, platform: "mobile", isOnline: true, joinDate: Date.now() - (100 * 86400000) },
+            ];
+            let followingState = JSON.parse(localStorage.getItem('memberFollows')) || {};
+
+            const newsData = [
+                { id: 1, title: "Major Game Update 2.0 Released!", date: "2025-12-03", summary: "Patch notes available now! Check out the new map and balancing changes.", content: "The wait is over! Update 2.0 brings a huge wave of content including the 'Aetheria' map, a complete overhaul of the crafting system, and significant balance changes to all classes. Read the full patch notes on our forums for details on character abilities." },
+                { id: 2, title: "Seeking Beta Testers for Next Title", date: "2025-11-28", summary: "We are opening applications for our closed beta of 'Project Vanguard'.", content: "If you're interested in an early look at our next big title, 'Project Vanguard', fill out the application form by the end of the week. We need dedicated players to stress-test servers and provide detailed feedback on gameplay mechanics and performance." },
+                { id: 3, title: "Holiday Community Meetup Announced", date: "2025-11-20", summary: "Join the moderators and developers for a casual end-of-year hangout stream.", content: "Grab your favorite holiday beverage and join us on December 20th for a relaxed evening stream. We'll be answering community questions live, giving away some exclusive swag, and just chatting about the year in gaming. Details and links will be posted next week!" }
+            ];
+
+            let events = [
+                { id: 1, title: "Monthly Solo Tournament", date: "2025-12-10", type: "tournament" },
+                { id: 2, title: "Tech Talk: New Engine", date: "2025-12-15", type: "community" },
+                { id: 3, title: "Team Deathmatch Challenge", date: "2025-12-21", type: "tournament" },
+                { id: 4, title: "General Community Hangout", date: "2025-12-05", type: "community" },
+                { id: 5, title: "Event Day Example", date: "2025-12-10", type: "community" },
+            ];
+            let nextEventId = events.length > 0 ? events.reduce((max, e) => Math.max(max, e.id), 0) + 1 : 1;
+            let calendarDate = new Date();
+            let currentYear = calendarDate.getFullYear();
+            let currentMonth = calendarDate.getMonth();
+            let selectedDate = null;
+            
+            // ------------------------------------------------------------------------------------------
+            // 3. UTILITIES
+            // ------------------------------------------------------------------------------------------
+            function formatTimeAgo(timestamp) {
+                const diff = Date.now() - timestamp; 
+                const seconds = Math.floor(diff / 1000);
+                const minutes = Math.floor(seconds / 60);
+                const hours = Math.floor(minutes / 60);
+                const days = Math.floor(hours / 24);
+                
+                if (seconds < 60) return `${seconds}s ago`;
+                if (minutes < 60) return `${minutes}m ago`;
+                if (hours < 24) return `${hours}h ago`;
+                return `${days}d ago`;
+            }
+
+            function sanitize(text) {
+                const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#x27;' };
+                return text.toString().replace(/[&<>"']/ig, (m) => map[m]);
+            }
+
+            // ------------------------------------------------------------------------------------------
+            // 4. FORUMS LOGIC (Client-side filtering/sorting/pagination)
+            // ------------------------------------------------------------------------------------------
+
+            const forumsSearchInput = document.getElementById('forums-search-input');
+            const sortBySelectForums = document.getElementById('sort-by');
+            const listEl = document.getElementById('thread-list');
+            const tagFiltersEl = document.getElementById('tag-filters');
+            const ITEMS_PER_PAGE = 8;
+            let forumCurrentPage = 1;
+            let forumCurrentTag = 'all';
+            let forumCurrentSearchQuery = '';
+            let forumCurrentSortBy = 'activity';
+            let filteredThreads = [];
+            let selectedThreadId = null;
+
+            function applyFiltersAndSortForums() {
+                let tempThreads = [...threadData];
+                const query = forumCurrentSearchQuery.toLowerCase();
+                const tag = forumCurrentTag;
+
+                if (query) {
+                    tempThreads = tempThreads.filter(thread => 
+                        thread.title.toLowerCase().includes(query) ||
+                        thread.tags.some(t => t.toLowerCase().includes(query))
+                    );
+                }
+                if (tag !== 'all') {
+                    tempThreads = tempThreads.filter(thread => thread.tags.includes(tag));
+                }
+
+                tempThreads.sort((a, b) => {
+                    if (forumCurrentSortBy === 'new') return b.id - a.id; 
+                    return b.lastActivity - a.lastActivity;
+                });
+
+                filteredThreads = tempThreads;
+                forumCurrentPage = 1;
+                renderThreads();
+            }
+
+            function renderThreads() {
+                listEl.innerHTML = '';
+                const start = (forumCurrentPage - 1) * ITEMS_PER_PAGE;
+                const end = start + ITEMS_PER_PAGE;
+                const threadsToRender = filteredThreads.slice(start, end);
+                
+                // Pagination UI update here (omitted for brevity, but relies on existing IDs)
+
+                threadsToRender.forEach(thread => {
+                    const li = document.createElement('li');
+                    li.className = 'thread-item';
+                    li.setAttribute('tabindex', '0');
+                    li.dataset.threadId = thread.id;
+                    li.innerHTML = `
+                        <div style="grid-column: 1 / 2;">
+                            <div style="font-weight: 600;">${sanitize(thread.title)}</div>
+                            <div style="display: flex; gap: 0.5rem; font-size: 0.75rem; margin-top: 0.5rem;">
+                                ${thread.tags.map(tag => `<span style="background-color: var(--accent-bg); padding: 0.1rem 0.5rem; border-radius: 4px;">${sanitize(tag)}</span>`).join('')}
+                            </div>
+                        </div>
+                        <div style="text-align: center; font-size: 0.9rem;">${sanitize(thread.author)}</div>
+                        <div style="text-align: center; font-size: 0.9rem;">
+                            <strong>${thread.replies}</strong> replies<br>
+                            <small>${formatTimeAgo(thread.lastActivity)}</small>
+                        </div>
+                    `;
+                    li.onclick = () => showThreadPreview(thread.id);
+                    listEl.appendChild(li);
+                });
+            }
+
+            function showThreadPreview(threadId) {
+                // Simplified stub
+                selectedThreadId = threadId;
+                const thread = threadData.find(t => t.id === threadId);
+                const previewContent = document.getElementById('preview-content');
+                const previewPlaceholder = document.getElementById('preview-placeholder');
+                
+                previewPlaceholder.style.display = 'none';
+                previewContent.style.display = 'block';
+                document.getElementById('preview-title').textContent = sanitize(thread.title);
+                // In a full implementation, the rest of the content would be rendered here.
+            }
+            
+            forumsSearchInput.addEventListener('input', () => {
+                forumCurrentSearchQuery = forumsSearchInput.value;
+                applyFiltersAndSortForums();
+            });
+
+            sortBySelectForums.addEventListener('change', () => {
+                forumCurrentSortBy = sortBySelectForums.value;
+                applyFiltersAndSortForums();
+            });
+            
+            // Forum Modal Handlers (Stub)
+            document.getElementById('open-modal-btn').onclick = () => document.getElementById('new-thread-modal').style.display = 'flex';
+            document.getElementById('close-modal-btn').onclick = () => document.getElementById('new-thread-modal').style.display = 'none';
+
+            // ------------------------------------------------------------------------------------------
+            // 5. MEMBERS LOGIC (Client-side filtering/sorting)
+            // ------------------------------------------------------------------------------------------
+            const membersSearchInput = document.getElementById('members-search-input');
+            const filterRoleSelect = document.getElementById('filter-role');
+            const filterPlatformSelect = document.getElementById('filter-platform');
+            const filterStatusSelect = document.getElementById('filter-status');
+            const sortBySelectMembers = document.getElementById('sort-by-members');
+            const gridEl = document.getElementById('profile-grid');
+
+            let memberCurrentSearchQuery = '';
+            let memberCurrentFilterRole = 'all';
+            let memberCurrentFilterPlatform = 'all';
+            let memberCurrentFilterStatus = 'all';
+            let memberCurrentSortBy = 'online';
+
+            function populateMemberFilters() {
+                // Populate select options dynamically (simplified)
+                const roles = ['All', 'Admin', 'Mod', 'Gamer'];
+                const platforms = ['All', 'PC', 'Console', 'Mobile'];
+                const statuses = ['All', 'Online', 'Offline'];
+
+                filterRoleSelect.innerHTML = roles.map(r => `<option value="${r.toLowerCase()}">${r}</option>`).join('');
+                filterPlatformSelect.innerHTML = platforms.map(p => `<option value="${p.toLowerCase()}">${p}</option>`).join('');
+                filterStatusSelect.innerHTML = statuses.map(s => `<option value="${s.toLowerCase()}">${s}</option>`).join('');
+            }
+            
+            function applyFiltersAndSortMembers() {
+                let filtered = [...memberData];
+                const query = memberCurrentSearchQuery.toLowerCase();
+
+                if (query) filtered = filtered.filter(m => m.username.toLowerCase().includes(query));
+                if (memberCurrentFilterRole !== 'all') filtered = filtered.filter(m => m.role === memberCurrentFilterRole);
+                if (memberCurrentFilterPlatform !== 'all') filtered = filtered.filter(m => m.platform === memberCurrentFilterPlatform);
+                if (memberCurrentFilterStatus !== 'all') {
+                    const status = memberCurrentFilterStatus === 'online';
+                    filtered = filtered.filter(m => m.isOnline === status);
+                }
+
+                filtered.sort((a, b) => {
+                    if (memberCurrentSortBy === 'online') {
+                        if (a.isOnline !== b.isOnline) return b.isOnline - a.isOnline;
+                        return b.level - a.level;
+                    } else if (memberCurrentSortBy === 'level') {
+                        return b.level - a.level;
+                    } else if (memberCurrentSortBy === 'newest') {
+                        return a.joinDate - b.joinDate;
+                    }
+                    return 0;
+                });
+
+                renderMemberGrid(filtered);
+            }
+
+            function renderMemberGrid(filteredMembers) {
+                gridEl.innerHTML = '';
+                filteredMembers.forEach(member => {
+                    const xpPercent = (member.xp / member.xpNext) * 100 || 0;
+                    const card = document.createElement('article');
+                    card.className = 'profile-card';
+                    card.setAttribute('tabindex', '0');
+                    card.dataset.memberId = member.id;
+                    card.innerHTML = `
+                        <div class="avatar-container" style="position: relative; margin-bottom: 1rem;">
+                            <div class="avatar-placeholder" style="width: 80px; height: 80px; border-radius: 50%; background: var(--primary-color); display: flex; align-items: center; justify-content: center; font-size: 2rem; color: white;">${member.username.charAt(0)}</div>
+                            <div class="online-status ${member.isOnline ? 'online' : ''}" style="position: absolute; bottom: 0; right: 0; width: 18px; height: 18px; border-radius: 50%; border: 3px solid var(--card-bg); background-color: ${member.isOnline ? 'var(--online-color)' : 'var(--border-color)'};"></div>
+                        </div>
+                        <h3 class="username" style="font-size: 1.5rem;">${member.username}</h3>
+                        <span class="role-badge role-${member.role}" style="font-size: 0.8rem; padding: 0.2rem 0.6rem; border-radius: 4px; margin-bottom: 0.75rem;">${member.role.charAt(0).toUpperCase() + member.role.slice(1)}</span>
+                        <div class="xp-container" style="width: 100%; margin-bottom: 1rem;">
+                            Level ${member.level}
+                            <div class="xp-bar" style="height: 10px; background-color: var(--border-color); margin-top: 5px; border-radius: 5px;">
+                                <div class="xp-progress" style="width: ${xpPercent}%; height: 100%; background-color: var(--primary-color);"></div>
+                            </div>
+                        </div>
+                        <button class="cta-button" style="padding: 0.5rem 1rem;" onclick="openProfileModal(${member.id})">View Profile</button>
+                    `;
+                    gridEl.appendChild(card);
+                });
+            }
+
+            // Member filter/sort change listeners
+            membersSearchInput.addEventListener('input', () => { memberCurrentSearchQuery = membersSearchInput.value; applyFiltersAndSortMembers(); });
+            filterRoleSelect.addEventListener('change', () => { memberCurrentFilterRole = filterRoleSelect.value; applyFiltersAndSortMembers(); });
+            filterPlatformSelect.addEventListener('change', () => { memberCurrentFilterPlatform = filterPlatformSelect.value; applyFiltersAndSortMembers(); });
+            filterStatusSelect.addEventListener('change', () => { memberCurrentFilterStatus = filterStatusSelect.value; applyFiltersAndSortMembers(); });
+            sortBySelectMembers.addEventListener('change', () => { memberCurrentSortBy = sortBySelectMembers.value; applyFiltersAndSortMembers(); });
+
+            // Member Modal (Stub)
+            window.openProfileModal = (id) => {
+                const member = memberData.find(m => m.id === id);
+                alert(`Viewing profile for ${member.username}. Full modal content would load here.`);
+                // In a real app, you'd populate document.getElementById('profile-modal') here.
+            };
+
+            // ------------------------------------------------------------------------------------------
+            // 6. EVENTS LOGIC (Calendar & News)
+            // ------------------------------------------------------------------------------------------
+
+            const newsListEl = document.getElementById('news-list');
+            const monthYearEl = document.getElementById('current-month-year');
+            const calendarGridEl = document.getElementById('calendar-grid');
+            const prevMonthBtn = document.getElementById('prev-month');
+            const nextMonthBtn = document.getElementById('next-month');
+            const tournamentFilter = document.getElementById('tournament-filter');
+            const communityFilter = document.getElementById('community-filter');
+            const drawer = document.getElementById('event-drawer');
+            const drawerList = document.getElementById('drawer-event-list');
+            
+            // News Rendering
+            function renderNews() {
+                newsListEl.innerHTML = newsData.map(item => `
+                    <article class="card news-card" tabindex="0" onclick="openNewsModal(${item.id})">
+                        <h3 style="color: var(--text-color); margin-bottom: 0.5rem;">${item.title}</h3>
+                        <small style="display: block; margin-bottom: 1rem; color: #9ca3af;">${item.date}</small>
+                        <p style="font-size: 0.9rem;">${item.summary}</p>
+                    </article>
+                `).join('');
+            }
+            
+            window.openNewsModal = (id) => {
+                const item = newsData.find(n => n.id === id);
+                document.getElementById('news-modal-title').textContent = item.title;
+                document.getElementById('news-modal-date').textContent = `Published: ${item.date}`;
+                document.getElementById('news-modal-body').textContent = item.content;
+                document.getElementById('news-modal').style.display = 'flex';
+            };
+            document.getElementById('close-news-modal').onclick = () => document.getElementById('news-modal').style.display = 'none';
+
+            // Calendar Rendering
+            function changeMonth(delta) {
+                currentMonth += delta;
+                if (currentMonth < 0) { currentMonth = 11; currentYear--; } 
+                else if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+                selectedDate = null;
+                renderCalendar();
+            }
+
+            function renderCalendar() {
+                monthYearEl.textContent = new Date(currentYear, currentMonth).toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+                calendarGridEl.querySelectorAll('.date-cell:not(.day-name)').forEach(el => el.remove());
+
+                const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+                const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+                const todayDate = calendarDate.getDate();
+                const isCurrentMonth = currentYear === calendarDate.getFullYear() && currentMonth === calendarDate.getMonth();
+                const activeFilters = [tournamentFilter.checked && 'tournament', communityFilter.checked && 'community'].filter(Boolean);
+                
+                const eventsByDate = events.filter(e => activeFilters.includes(e.type)).reduce((acc, event) => {
+                    if (!acc[event.date]) acc[event.date] = [];
+                    acc[event.date].push(event);
+                    return acc;
+                }, {});
+
+                for (let i = 0; i < firstDayOfMonth; i++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'date-cell empty';
+                    calendarGridEl.appendChild(cell);
+                }
+
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dateString = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                    const cell = document.createElement('div');
+                    cell.className = 'date-cell';
+                    cell.textContent = day;
+                    cell.dataset.date = dateString;
+                    cell.setAttribute('tabindex', '0');
+
+                    if (isCurrentMonth && day === todayDate) cell.classList.add('today');
+                    
+                    const dayEvents = eventsByDate[dateString] || [];
+                    if (dayEvents.length > 0) {
+                        const dotsEl = document.createElement('div');
+                        dotsEl.style.display = 'flex'; dotsEl.style.gap = '3px';
+                        dayEvents.slice(0, 3).forEach(event => {
+                            const color = event.type === 'tournament' ? 'var(--primary-color)' : 'var(--online-color)';
+                            dotsEl.innerHTML += `<span style="width: 6px; height: 6px; border-radius: 50%; background-color: ${color};"></span>`;
+                        });
+                        cell.appendChild(dotsEl);
+                        cell.onclick = () => showEventDrawer(dateString);
+                    }
+                    calendarGridEl.appendChild(cell);
+                }
+            }
+
+            function showEventDrawer(dateString) {
+                const date = new Date(dateString);
+                document.getElementById('drawer-date-title').textContent = `Events on ${date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}`;
+                drawerList.innerHTML = '';
+
+                const dayEvents = events.filter(e => e.date === dateString);
+                
+                if (dayEvents.length === 0) {
+                    drawerList.innerHTML = '<p>No events scheduled for this day.</p>';
+                } else {
+                    drawerList.innerHTML = dayEvents.map(e => `
+                        <div style="padding: 0.75rem 0; border-bottom: 1px dashed var(--border-color);">
+                            <h4 style="color: var(--primary-color); margin-bottom: 0.25rem;">
+                                <span style="font-size: 0.75rem; padding: 0.2rem 0.6rem; border-radius: 4px; font-weight: bold; color: white; background-color: ${e.type === 'tournament' ? 'var(--primary-color)' : 'var(--online-color)'}; margin-right: 0.5rem;">
+                                    ${e.type === 'tournament' ? 'Tournament' : 'Community'}
+                                </span>
+                                ${e.title}
+                            </h4>
+                        </div>
+                    `).join('');
+                }
+                drawer.classList.add('open');
+                drawer.style.transform = 'translateY(0)';
+            }
+            
+            document.getElementById('close-drawer-btn').onclick = () => drawer.style.transform = 'translateY(100%)';
+            prevMonthBtn.onclick = () => changeMonth(-1);
+            nextMonthBtn.onclick = () => changeMonth(1);
+            tournamentFilter.addEventListener('change', renderCalendar);
+            communityFilter.addEventListener('change', renderCalendar);
+            
+            // Event Creation Stub
+            document.getElementById('open-event-modal').onclick = () => document.getElementById('create-event-modal').style.display = 'flex';
+            document.getElementById('close-event-modal').onclick = () => document.getElementById('create-event-modal').style.display = 'none';
+
+            document.getElementById('create-event-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const title = document.getElementById('event-title').value;
+                const date = document.getElementById('event-date').value;
+                const type = document.getElementById('event-type').value;
+
+                events.push({ id: nextEventId++, title, date, type });
+                document.getElementById('create-event-modal').style.display = 'none';
+                renderCalendar();
+            });
+
+            // ------------------------------------------------------------------------------------------
+            // 7. ABOUT LOGIC (Accordions & Contact Form)
+            // ------------------------------------------------------------------------------------------
+
+            // Accordion Data
+            const rulesData = [
+                { title: "1. Be Respectful and Civil", content: "Treat all members with respect. Hate speech, harassment, or personal attacks are strictly prohibited." },
+                { title: "2. Keep Content Relevant and Legal", content: "All posts should relate to gaming or approved topics. No illegal or NSFW content." },
+                { title: "3. No Cheating or Exploiting", content: "Any use of third-party software or exploits in community games will result in an immediate ban." },
+            ];
+            const faqData = [
+                { title: "How do I report a bug or suggest a feature?", content: "Use the designated 'Feedback' section in the forums." },
+                { title: "What time zone are events scheduled in?", content: "All official event times are listed in **UTC**. Check a time converter." },
+                { title: "Can I stream or create content for your tournaments?", content: "Yes, we encourage content creation. Please ensure you link back to the official Starkverse event page." },
+                { title: "How can I become a Moderator?", content: "We announce moderator applications when needed in the Announcements section of our forums." },
+            ];
+            
+            function renderAccordions(containerId, data) {
+                const container = document.getElementById(containerId);
+                container.innerHTML = data.map((item, index) => `
+                    <div class="accordion-item">
+                        <button class="accordion-header" aria-expanded="false" aria-controls="${containerId}-content-${index}" id="${containerId}-header-${index}" role="heading" aria-level="3">
+                            <span>${item.title}</span>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </button>
+                        <div id="${containerId}-content-${index}" class="accordion-content" role="region" aria-labelledby="${containerId}-header-${index}" style="max-height: 0;">
+                            <p>${item.content}</p>
+                        </div>
+                    </div>
+                `).join('');
+                setupAccordion(containerId);
+            }
+            
+            function setupAccordion(accordionId) {
+                const accordion = document.getElementById(accordionId);
+                accordion.addEventListener('click', (e) => {
+                    const header = e.target.closest('.accordion-header');
+                    if (!header) return;
+
+                    const expanded = header.getAttribute('aria-expanded') === 'true';
+                    const content = document.getElementById(header.getAttribute('aria-controls'));
+
+                    // Close all others
+                    accordion.querySelectorAll('.accordion-header').forEach(h => {
+                        if (h !== header && h.getAttribute('aria-expanded') === 'true') {
+                            h.setAttribute('aria-expanded', 'false');
+                            document.getElementById(h.getAttribute('aria-controls')).style.maxHeight = 0;
+                        }
+                    });
+
+                    // Toggle clicked
+                    if (expanded) {
+                        header.setAttribute('aria-expanded', 'false');
+                        content.style.maxHeight = 0;
+                    } else {
+                        header.setAttribute('aria-expanded', 'true');
+                        content.style.maxHeight = content.scrollHeight + "px"; 
+                    }
+                });
+            }
+
+            // Contact Form
+            const contactForm = document.getElementById('contact-form');
+            const formMessage = document.getElementById('form-message');
+            const honeypotField = document.getElementById('comment-field');
+            
+            function displayMessage(isSuccess, message) {
+                formMessage.textContent = message;
+                formMessage.className = isSuccess ? 'success' : 'error';
+                formMessage.style.display = 'block';
+                setTimeout(() => formMessage.style.display = 'none', 5000);
+            }
+
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                formMessage.style.display = 'none'; 
+
+                if (honeypotField.value !== '') {
+                    console.warn("Honeypot trap sprung.");
+                    contactForm.reset();
+                    displayMessage(true, "Thank you for your message! (Bot trap detected)");
+                    return;
+                }
+                
+                // Simplified client-side validation
+                if (!contactForm.checkValidity()) {
+                    displayMessage(false, "Please fill out all required fields correctly.");
+                    return;
+                }
+
+                // SIMULATED SUCCESS
+                displayMessage(true, "Thank you for your message! We will be in touch shortly. (Simulated Success)");
+                contactForm.reset();
+            });
+
+            // Report User Modal Handlers
+            document.getElementById('open-report-modal').onclick = (e) => {
+                e.preventDefault();
+                document.getElementById('report-modal').style.display = 'flex';
+            };
+            document.getElementById('close-report-modal').onclick = () => document.getElementById('report-modal').style.display = 'none';
+            document.getElementById('report-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert(`Report submitted successfully! (Simulated)`);
+                document.getElementById('report-modal').style.display = 'none';
+            });
+            
+            // ------------------------------------------------------------------------------------------
+            // 8. INITIALIZATION CALLS
+            // ------------------------------------------------------------------------------------------
+            
+            // Forums
+            renderThreads();
+            
+            // Members
+            populateMemberFilters();
+            applyFiltersAndSortMembers();
+
+            // Events
+            renderNews();
+            renderCalendar();
+
+            // About
+            renderAccordions('rules-accordion', rulesData);
+            renderAccordions('faq-accordion', faqData);
+        });
+    </script>
+</body>
+</html>
